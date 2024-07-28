@@ -1,4 +1,7 @@
 export enum ViewMode {
+  Minute = "Minute",
+  QuarterHour = "Quarter Hour",
+  HalfHour = "Half Hour",
   Hour = "Hour",
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
