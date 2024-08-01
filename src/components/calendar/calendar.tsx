@@ -355,6 +355,92 @@ export const Calendar: React.FC<CalendarProps> = ({
     return [topValues, bottomValues];
   };
 
+  const getCalendarValuesForPartOfHour = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const ticks = viewMode === ViewMode.HalfHour ? 2 : 4;
+    const topDefaultHeight = headerHeight * 0.5;
+    const dates = dateSetup.dates;
+
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      const bottomValue = getCachedDateTimeFormat(locale, {
+        minute: "numeric",
+      }).format(date);
+
+      bottomValues.push(
+        <text
+          key={date.getTime()}
+          y={headerHeight * 0.8}
+          x={columnWidth * (i + +rtl)}
+          className={styles.calendarBottomText}
+          fontFamily={fontFamily}
+        >
+          {bottomValue}
+        </text>
+      );
+      if (i !== 0 && date.getHours() !== dates[i - 1].getHours()) {
+        const topValue = `${date.getHours()}:00`;
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue + date.getFullYear()}
+            value={topValue}
+            x1Line={columnWidth * i + ticks * columnWidth}
+            y1Line={0}
+            y2Line={topDefaultHeight}
+            xText={columnWidth * i + ticks * columnWidth * 0.5}
+            yText={topDefaultHeight * 0.9}
+          />
+        );
+      }
+    }
+
+    return [topValues, bottomValues];
+  }
+
+  const getCalendarValuesForMinute = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    const topDefaultHeight = headerHeight * 0.5;
+    const dates = dateSetup.dates;
+
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      const bottomValue = getCachedDateTimeFormat(locale, {
+        minute: "numeric",
+      }).format(date);
+
+      bottomValues.push(
+        <text
+          key={date.getTime()}
+          y={headerHeight * 0.8}
+          x={columnWidth * (i + +rtl)}
+          className={styles.calendarBottomText}
+          fontFamily={fontFamily}
+        >
+          {bottomValue}
+        </text>
+      );
+      if (i !== 0 && date.getHours() !== dates[i - 1].getHours()) {
+        const displayDate = dates[i - 1];
+        const topValue = `${displayDate.getHours()}:00`;
+        const topPosition = (date.getMinutes() - 60) / 2;
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue + displayDate.getFullYear()}
+            value={topValue}
+            x1Line={columnWidth * i}
+            y1Line={0}
+            y2Line={topDefaultHeight}
+            xText={columnWidth * (i + topPosition)}
+            yText={topDefaultHeight * 0.9}
+          />
+        );
+      }
+    }
+    return [topValues, bottomValues];
+  };
+
   let topValues: ReactChild[] = [];
   let bottomValues: ReactChild[] = [];
   switch (dateSetup.viewMode) {
@@ -379,6 +465,14 @@ export const Calendar: React.FC<CalendarProps> = ({
       break;
     case ViewMode.Hour:
       [topValues, bottomValues] = getCalendarValuesForHour();
+      break;
+    case ViewMode.HalfHour:
+    case ViewMode.QuarterHour:
+      [topValues, bottomValues] = getCalendarValuesForPartOfHour();
+      break;
+    case ViewMode.Minute:
+      [topValues, bottomValues] = getCalendarValuesForMinute();
+      break;
   }
   return (
     <g className="calendar" fontSize={fontSize} fontFamily={fontFamily}>
