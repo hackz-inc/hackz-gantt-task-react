@@ -380,11 +380,10 @@ export const Calendar: React.FC<CalendarProps> = ({
         </text>
       );
       if (i !== 0 && date.getHours() !== dates[i - 1].getHours()) {
-        const displayDate = dates[i - 1];
-        const topValue = `${displayDate.getHours()}:00`;
+        const topValue = `${date.getHours()}:00`;
         topValues.push(
           <TopPartOfCalendar
-            key={topValue + displayDate.getFullYear()}
+            key={topValue + date.getFullYear()}
             value={topValue}
             x1Line={columnWidth * i + ticks * columnWidth}
             y1Line={0}

@@ -133,27 +133,31 @@ export const ganttDateRange = (
       break;
     case ViewMode.Hour:
       newStartDate = startOfDate(newStartDate, "hour");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
+      newStartDate = addToDate(newStartDate, newStartDate.getHours() * -60, "minute");
+
       newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 1, "day");
+      newEndDate = addToDate(newEndDate, (24 - newEndDate.getHours() === 0 ? 24 : newEndDate.getHours()) * 60, "minute");
       break;
     case ViewMode.HalfHour:
       newStartDate = startOfDate(newStartDate, "hour");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
+      newStartDate = addToDate(newStartDate, newStartDate.getHours() * -60, "minute");
+
       newEndDate = startOfDate(newEndDate, "hour");
-      newEndDate = addToDate(newEndDate, 750, "minute");
+      newEndDate = addToDate(newEndDate, (24 - newEndDate.getHours() === 0 ? 24 : newEndDate.getHours()) * 60, "minute");
       break;
     case ViewMode.QuarterHour:
       newStartDate = startOfDate(newStartDate, "hour");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
+      newStartDate = addToDate(newStartDate, newStartDate.getHours() * -60, "minute");
+
       newEndDate = startOfDate(newEndDate, "hour");
-      newEndDate = addToDate(newEndDate, 780, "minute");
+      newEndDate = addToDate(newEndDate, (24 - newEndDate.getHours() === 0 ? 24 : newEndDate.getHours()) * 60, "minute");
       break;
     case ViewMode.Minute:
       newStartDate = startOfDate(newStartDate, "minute");
-      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "minute");
+      newStartDate = addToDate(newStartDate, newStartDate.getHours() * -60, "minute");
+
       newEndDate = startOfDate(newEndDate, "hour");
-      newEndDate = addToDate(newEndDate, 1, "hour");
+      newEndDate = addToDate(newEndDate, (24 - newEndDate.getHours() === 0 ? 24 : newEndDate.getHours()) * 60, "minute");
       break;
   }
   return [newStartDate, newEndDate];
